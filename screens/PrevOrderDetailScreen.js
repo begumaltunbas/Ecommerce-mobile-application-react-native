@@ -16,7 +16,7 @@ const PrevOrderDetailScreen = ({ route, navigation }) => {
     marginBottom: 20,
   };
   /* 2. Get the param */
-  const { itemlist,order_time,order_status } = route.params;
+  const { itemlist,order_time,order_status,total_price,cart_id } = route.params;
 
 // console.log("DID LIST COME",itemlist)
 
@@ -24,43 +24,46 @@ const PrevOrderDetailScreen = ({ route, navigation }) => {
 const renderItem = ({ item }) => {
    
     return (
-        <View style={{ flexDirection: 'row'}}>
-      <View style={{ flexDirection: 'row', paddingVertical:20}}>
+        
+      <View style={{ flexDirection: 'row', marginVertical: 15}}>
         <Image style={styles.image}
           source={{
             uri: item.image_path
           }} />
-        <View>
-          <Text style={{ width: 150,fontSize: 13, fontWeight: 'bold' }}>{item.name} </Text>
+        <View style={{ flexDirection: 'column'}}>
+          <Text style={{ width:150,fontSize: 13, fontWeight: 'bold' }}>{item.name} </Text>
           <Text style={{ fontSize: 15 }}> Model: {item.model}</Text>
           <Text > </Text>
           <Text style={{ fontSize: 20 }}> ${item.price} </Text>
+          <Text style={{ fontSize: 18 }}> x{item.amount} </Text>
+          
+          </View>
+
         
-        <View style={{marginLeft:170, marginTop:-110}}>
+        <View style={{flexDirection: 'column'}}>
         {order_status !== 'Preparing' && order_status !=='Cancelled' && order_status !== 'Shipped' &&
         <Button
-              title="Rate|Comment"
+              title="Rate-Comment"
               onPress={() => navigation.navigate('RateComment', {
                 itemName: item.name,
                 itemImage:item.image_path
               })} //navigate
             />
-            
         }
-       
         {order_status !== 'Preparing' && order_status !=='Cancelled' && order_status !== 'Shipped' &&
         <Button
               title="Return"
-              onPress={() => alert("empty")} //navigate
+              onPress={() => navigation.navigate('Return', {
+                itemName: item.name,
+                itemImage:item.image_path,
+                cart_id:cart_id,
+                amount_purchased:item.amount
+              })} //navigate
             />
-            
         }
+
         
         </View>
-        </View>
-        
-      </View>
-      
       </View>
 
 
@@ -90,9 +93,10 @@ const renderItem = ({ item }) => {
 				borderEndWidth: 1000,
 				}}
 		/>
-         <Text style={{ marginTop: 25, paddingLeft:10,fontSize: 18, marginRight: 30,fontWeight: 'bold', color: '#000000bf' }}>  Total Amount paid: $ </Text>
-         <Text style={{ marginTop: 25, paddingLeft:10,fontSize: 18, marginRight: 30,fontWeight: 'bold', color: '#000000bf' }}>  Order Time:  {order_time} </Text>
-         <Text style={{ marginTop: 25, paddingLeft:10,fontSize: 18, marginRight: 30,fontWeight: 'bold', color: '#000000bf' }}>  Payment type: Credit Card </Text>
+         <Text style={{ textDecorationLine:'underline',marginTop: 25, paddingLeft:10,fontSize: 18, marginRight: 30,fontWeight: 'bold', color: '#000000bf' }}>  Total Amount paid:  </Text><Text style={{ fontWeight: '500', paddingLeft:17,fontSize: 18}}> ${total_price}</Text>
+         <Text style={{ textDecorationLine:'underline',marginTop: 25, paddingLeft:10,fontSize: 18, marginRight: 30,fontWeight: 'bold', color: '#000000bf' }}>  Order Time: </Text><Text style={{fontWeight: '500', paddingLeft:17,fontSize: 18}}>{order_time}</Text>
+         <Text style={{ textDecorationLine:'underline',marginTop: 25, paddingLeft:10,fontSize: 18, marginRight: 30,fontWeight: 'bold', color: '#000000bf' }}>  Payment Type: </Text><Text style={{fontWeight: '500', paddingLeft:17,fontSize: 18}}>Credit card </Text>
+        
 
     </ScrollView>
   );

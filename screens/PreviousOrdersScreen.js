@@ -47,8 +47,50 @@ useEffect(() => {
 
     })
     let json = await response.json();
-    console.log(" orders::!!!", json.orders);
+  console.log(" orders::!!!", json.orders);
     setOrdersList(json.orders);
+  }
+  
+  
+  
+  
+  const cancelOrders = async (order_idd) => {
+    
+    let token_id = 0;
+    let username = 0;
+
+    try {
+      token_id = await AsyncStorage.getItem('token');
+      // setToken(token_id);
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
+      // await AsyncStorage.setItem('userToken', userToken);
+      username = await AsyncStorage.getItem('userName');
+      // setUsername(username);
+    } catch (e) {
+      console.log(e);
+    }
+
+    const response = await fetch('http://localhost:5000/cancelOrder', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        user: username,
+        token: token_id,
+
+      },
+      body: JSON.stringify({
+        order_id: order_idd ,
+      })
+
+    })
+    let json = await response.json();
+  //console.log(" orders::!!!", json.orders);
+    getOrders();
   }
 
   
@@ -61,8 +103,9 @@ useEffect(() => {
         
         <View>
          
-          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Order Time: {item.time} </Text>
-          <Text style={{ fontSize: 17 }}>Order Status :{item.status} </Text>
+          <Text style={{ textDecorationLine:'underline' ,width: 190,fontSize: 18, fontWeight: 'bold' }}>Order Date:  </Text><Text style={{fontSize: 18}}>{item.time}</Text>
+          <Text></Text>
+          <Text style={{ textDecorationLine:'underline',fontSize: 17 ,fontWeight: 'bold'}}>Order Status : </Text><Text style={{fontSize: 18}}>{item.status}</Text>
           {/* <Text style={{fontSize:18}}> Rating: {item.rating }</Text> */}
           {/* <Text style={{ fontSize: 15 }}> Quantity: {item.amount} </Text> */}
           <View style={styles.together}>
@@ -72,9 +115,16 @@ useEffect(() => {
               itemlist:item.products,
               order_time:item.time,
               order_status:item.status,
+              total_price: item.total_price, 
+              cart_id:item.cart_id
 
               })}  //navigate
             />
+            {item.status==='Preparing' &&
+            <Button
+              title="Cancel order"
+              onPress={() => {cancelOrders(item.order_id), alert('Your order is cancelled!')}}  //navigate
+            /> }
            
            
             
@@ -97,7 +147,7 @@ useEffect(() => {
       }
       {
         item.status == 'Preparing'&&
-        <View style={{ flexDirection: 'row',  marginLeft:140}}><Image style={{width: 45, height: 45, marginBottom: 10 }}
+        <View style={{ flexDirection: 'row',  marginLeft:110}}><Image style={{width: 45, height: 45, marginBottom: 10 }}
             source={{
               uri: 'https://static.thenounproject.com/png/598271-200.png'
             }}/></View>

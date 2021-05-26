@@ -7,7 +7,7 @@ import CreditCard from 'react-native-credit-card-form-ui';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useIsFocused } from "@react-navigation/native";
-import { MaterialIcons, AntDesign, Ionicons,FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons, AntDesign, Ionicons } from '@expo/vector-icons';
 
 
 const CheckoutScreen = ({ route, navigation }) => {
@@ -39,8 +39,8 @@ const CheckoutScreen = ({ route, navigation }) => {
 			console.log(e);
 		}
 
-		console.log("checkout screen- TOKEN id that we sent to backend::!!!", token_id);
-		console.log("checkout screen- USERNAME that we sent to backend::!!!", username);
+		// console.log("checkout screen- TOKEN id that we sent to backend::!!!", token_id);
+		// console.log("checkout screen- USERNAME that we sent to backend::!!!", username);
 
 		const response2 = await fetch('http://localhost:5000/basket', {
 			method: 'GET',
@@ -55,7 +55,7 @@ const CheckoutScreen = ({ route, navigation }) => {
 		})
 
 		let json = await response2.json();
-		console.log("basket products::!!!", json);
+		// console.log("basket products::!!!", json);
 
 		setBasketList(json.products);
 	}
@@ -80,7 +80,7 @@ const CheckoutScreen = ({ route, navigation }) => {
 
 							<View style={{}}><Text style={{ fontSize: 18, color: '#000000bf' }}> ${item.price} </Text></View>
 						
-							<View style={{ marginLeft: 200 , marginRight:50}}><Text style={{ fontSize: 18}}>{item.quantity}</Text></View>
+							<View style={{ marginLeft: 200 , marginRight:50}}><Text style={{ fontSize: 18}}>x{item.quantity}</Text></View>
 
 						</View>
 
@@ -128,6 +128,10 @@ const CheckoutScreen = ({ route, navigation }) => {
       console.log(e);
     }
 
+    // console.log("checkout screen- TOKEN id that we sent to backend::!!!", token_id);
+		// console.log("checkout screen- USERNAME that we sent to backend::!!!", username);
+
+
     const response = await fetch('http://localhost:5000/order', {
       method: 'POST',
       headers: {
@@ -143,24 +147,19 @@ const CheckoutScreen = ({ route, navigation }) => {
     let json = await response.json();
     console.log("json after checkout?!?!?!!?",json);
     
-
-    alert("We received your order! Here is your order number 23814281.")
-    navigation.navigate('Invoice')
+    if(json.status_code === 200){
+      alert("We received your order! Here is your order number 23814281.")
+      navigation.navigate('Invoice')
+    }
+    else{
+      alert("Try again!")
+    }
   }
 
  
 
   const { total } = route.params;
-  // const creditCardRef = React.useRef();
-
-
-  // const handleSubmit = React.useCallback(() => {
-  //   if (creditCardRef.current) {
-  //     const { error, data } = creditCardRef.current.submit();
-  //     console.log('ERROR: ', error);
-  //     console.log('CARD DATA: ', data);
-  //   }
-  // }, []);
+ 
 
   const card_no_Change = (val) => {
     if( val.length === 0 ) {
@@ -234,8 +233,9 @@ const cvv_Change = (val) => {
         />
 
         </ScrollView>
-       
-        <View><Text style={{ marginTop: 20,  fontWeight: "500", fontSize: 20, color: 'black' }}> <FontAwesome name="credit-card" size={24} color="black" />  Credit Card Details:</Text></View>
+
+
+        <View><Text style={{ marginTop: 20, marginLeft: 10, fontWeight: "500", fontSize: 20, color: 'black' }}><AntDesign name="creditcard" size={25} color="black"/>  Credit Card Details:</Text></View>
       <View style={styles.action}>
         <TextInput 
                     placeholder="Enter Credit Card Number"
@@ -268,19 +268,6 @@ const cvv_Change = (val) => {
 
 
       <View><Text style={{ marginTop: 20, marginLeft: 20, fontWeight: "500", fontSize: 20, color: 'black' }}>Total Payment: ${total}</Text></View>
-
-      {/* <View style={{ marginTop: 100, marginLeft: 40 }}>
-        <CreditCard
-          ref={creditCardRef}
-          placeholders={{ number: '0000 0000 0000 0000', holder: 'Card Holder', expiration: 'MM/YY', cvv: '000' }}
-          labels={{ holder: 'Card Holder', expiration: 'Expiration Date', cvv: 'CVV' }}
-          expirationDateFormat={"MM/YY"}
-          background={'#848484'}
-          textColor={'#FFFFFF'}
-          placeholderTextColor={'#FFFFFF'}
-        />
-        </View> */}
-        
 
       <View style={{ marginHorizontal: 90 }}>
 
