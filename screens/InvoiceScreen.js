@@ -1,16 +1,30 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import { View,ScrollView, Text, Button, StyleSheet,TouchableHighlight } from 'react-native';
 
-const InvoiceScreen = () => {
-    return (
-      <View style={styles.container}>
-        <Text>Bookmark Screen</Text>
-        <Button
-          title="Click Here"
-          onPress={() => alert('Button Clicked!')}
-        />
-      </View>
-    );
+import PDFReader from 'rn-pdf-reader-js'
+
+
+const InvoiceScreen = ({ route, navigation }) => {
+
+  
+  const { invoice_all } = route.params;
+ // console.log("!!!!!!!!DID EVERY COME",invoice_all);
+  const invoice=invoice_all.invoice;
+ 
+  const my_uri = "data:application/pdf;base64,"+invoice;
+
+
+return (
+<PDFReader
+      source={{
+        base64:my_uri ,
+      }}
+      // props={{
+      //   source: Source,
+      // }}
+    />
+   
+)
 };
 
 export default InvoiceScreen;

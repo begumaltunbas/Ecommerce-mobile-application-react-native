@@ -72,7 +72,7 @@ const ProfileScreen = ({ navigation }) => {
                         (
 
                             <View style={styles.button}>
-                                <Text style={{ marginTop: 20, fontSize: 20, marginRight: 30 }}>  <Icon2 name='user' size={30}> </Icon2> {username}</Text>
+                                <Text style={{ marginTop: 60, fontSize: 20, marginRight: 30 }}>  <Icon2 name='user' size={30}> </Icon2> {username}</Text>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('PreviousOrders')}
                                     style={[styles.signIn, {
@@ -110,7 +110,7 @@ const ProfileScreen = ({ navigation }) => {
                                 >
                                     <Text style={[styles.textSign, {
                                         color: '#BFA38F'
-                                    }]}>Comments | Ratings </Text>
+                                    }]}>Contact Us </Text>
                                 </TouchableOpacity>
 
 

@@ -99,6 +99,7 @@ useEffect(() => {
     //console.log("start4",item.name);
     return (
 <View>
+
       <View style={{ flexDirection: 'row', marginVertical: 40, paddingHorizontal: 20 }}>
         
         <View>
@@ -120,6 +121,7 @@ useEffect(() => {
 
               })}  //navigate
             />
+           
             {item.status==='Preparing' &&
             <Button
               title="Cancel order"
@@ -199,7 +201,7 @@ useEffect(() => {
       <FlatList style={{ flex: 1 }}
         data={orderslist}
         renderItem={renderItem}
-        keyExtractor={(item) => item.time.toString()}
+        keyExtractor={(item) => item.order_id}
       />
 
     </SafeAreaView>
@@ -238,6 +240,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
 
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
 
 
