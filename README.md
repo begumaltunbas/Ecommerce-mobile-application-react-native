@@ -5,7 +5,7 @@
 Features:
 - login and register
 - guests can add products to cart but cant checkout
-- only users can checkout
+- only users can checkout, 
 - view their previous orders
 - cancel an order
 - place a return request for product
