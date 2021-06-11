@@ -3,6 +3,8 @@ import { Button } from './Products/Button';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, FlatList, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { Foundation } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const ExploreScreen = ({ navigation }) => {
 
   // const sleep = (milliseconds) => {
@@ -45,13 +47,35 @@ const ExploreScreen = ({ navigation }) => {
     }
   }
 
+  
   const addToBasket = async (itemname) => {
+
+    let token_id = 0;
+    let username = 0;
+
+    try {
+      token_id = await AsyncStorage.getItem('token');
+      // setToken(token_id);
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
+      // await AsyncStorage.setItem('userToken', userToken);
+      username = await AsyncStorage.getItem('userName');
+      // setUsername(username);
+    } catch (e) {
+      console.log(e);
+    }
+
 
     const response2 = await fetch('http://localhost:5000/basket', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        user: username,
+        token: token_id,
       },
       body: JSON.stringify({
         //category_name:'Coffee Machines'
@@ -60,8 +84,17 @@ const ExploreScreen = ({ navigation }) => {
       })
 
     })
-    //  console.log("item geldi mi",itemname);
+    // console.log("item geldi mi", itemname);
     let json = await response2.json();
+
+
+    if(json.status_code === 200){
+      alert("Your cart is updated")
+ 
+    }
+    else{
+      alert("Try again!")
+    }
     //console.log("mesajımız: ", json.message)
     //console.log("code: ", json.status_code)
     //setBasket(json.category_elements);  
